@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.saran.butterknifedemo.dummy.DummyContent;
 import com.saran.butterknifedemo.dummy.DummyContent.DummyItem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -27,9 +31,10 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private Unbinder unbinder;
 
-    private RecyclerView recyclerView;
-    private TextView textView;
+    @BindView(R.id.list) RecyclerView recyclerView;
+    @BindView(R.id.tv) TextView textView;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -60,8 +65,9 @@ public class ItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        textView = (TextView) view.findViewById(R.id.tv);
+
+        unbinder = ButterKnife.bind(this,view);
+
         textView.setText("Hello Butterknife");
         // Set the adapter
             Context context = view.getContext();
@@ -75,6 +81,11 @@ public class ItemFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
+    }
 
     @Override
     public void onAttach(Context context) {
